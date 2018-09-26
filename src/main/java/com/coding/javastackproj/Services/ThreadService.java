@@ -1,5 +1,7 @@
 package com.coding.javastackproj.Services;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.coding.javastackproj.Models.Thread;
@@ -12,12 +14,22 @@ public class ThreadService {
 	public ThreadService(ThreadRepo threadRepo) {
 		this.threadRepo = threadRepo;
 	}
+
+//	Find Thread by ID
+	
+	public Thread findThreadById(Long id) {
+		Optional<Thread> result = threadRepo.findById(id);
+		if(result.isPresent()) {
+			return result.get();			
+		}
+		else return null;
+	}
+	
+	
 //	Create
-	public Thread createThread(User creator , Thread thread) {		
-		thread.setCreator(creator);
-		System.out.println("set creator success");
+	public Thread createThread( Thread thread) {		
 		threadRepo.save(thread);
-		System.out.println("saved created thread..returning to controller now ");
+				System.out.println("saved created thread..returning to controller now ");
 		return thread; 
 	}
 	

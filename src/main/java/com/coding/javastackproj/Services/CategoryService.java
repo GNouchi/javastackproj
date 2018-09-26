@@ -39,13 +39,16 @@ public class CategoryService {
 	}
 	
 	
-//	Create
-	public Category createCategory(Category category) {		
-		if(!categoryExists(category.getCategory_name())) {
-			return categoryRepo.save(category);			
+//	Create (returns null or category)
+	public Category createCategory(String category_name) {		
+		if(!categoryExists(category_name)) {
+			Category newCat = new Category();
+			newCat.setCategory_name(category_name);
+			return categoryRepo.save(newCat);			
 		}
 		else return null;
 	}
+	
 //	Read
 //	Update
 //	Destroy

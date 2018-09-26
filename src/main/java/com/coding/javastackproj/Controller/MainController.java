@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.coding.javastackproj.Models.Category;
 import com.coding.javastackproj.Models.Post;
+import com.coding.javastackproj.Models.Thread;
 import com.coding.javastackproj.Models.User;
 import com.coding.javastackproj.Services.CategoryService;
 import com.coding.javastackproj.Services.PostService;
@@ -30,8 +32,8 @@ public class MainController {
 	private final ThreadService threadService;
 	private final PostService postService;
 	private final CategoryService categoryService;
-	public List<String> baseCategories = new ArrayList<String>();
-	
+	public List<Category> baseCategories = new ArrayList<Category>();
+	public List<String> arr = new ArrayList<String>();
 	
 	public MainController(UserService userService, UserValidator userValidator, ThreadService threadService,
 			PostService postService, CategoryService categoryService) {
@@ -40,47 +42,70 @@ public class MainController {
 		this.threadService = threadService;
 		this.postService = postService;
 		this.categoryService = categoryService;
-		baseCategories.add("delicious food");
-		baseCategories.add("cooking");
-		baseCategories.add("dumb stuff");
-		baseCategories.add("!cats");
+		arr.add("delicious food");
+		arr.add("cooking");
+		arr.add("dumb stuff");
+		arr.add("!cats");
+		for( int i = 0; i< arr.size(); i++) {
+			Category baseCat = categoryService.createCategory(arr.get(i));
+			baseCategories.add(baseCat);
+		}
 	}
 
 	
-// MAIN PAGE
-	
-	@RequestMapping( {"/", "/index", "/home","/login", "/register"} )
+// MAIN PAGE	
+
+	@RequestMapping( {"/", "/index", "/home","/login", "/register", "/createthread"} )
 	public String index( 
 			@ModelAttribute("user") User user
+			, @ModelAttribute("thread") Thread thread
 			, HttpSession session
 			, Model model
 	) {
 		if(session.getAttribute("userid")!=null) {			
-			Long userid =  (Long) session.getAttribute("userid");			
-			model.addAttribute("user", userService.findById(userid));
-			System.out.println(baseCategories);
-			model.addAttribute("categoryOptions" , baseCategories);
+			Long userid =  (Long) session.getAttribute("userid");
+			List<Category> allCats = categoryService.findAllCategories();
+			model.addAttribute("current_user", userService.findById(userid));
+			model.addAttribute("categoryOptions" , allCats);
 		}		
 		return "index";
 	}
 	
+	
 //	Show Thread
+	
 	@RequestMapping("/show/{id}")
 	public String showThread(
-		@PathVariable("id")Long id
-		, Model model
-		, @ModelAttribute("post") Post post) {
-		threadService
+					@PathVariable("id")Long id
+					, Model model
+					, @ModelAttribute("post") Post post
+					, HttpSession session 
+	) {
+		Long userid =  (Long) session.getAttribute("userid");	
+		Thread current_thread = threadService.findThreadById(id);
+		if(session.getAttribute("userid")==null) {
+//		if (current_thread==null) 	
+			return "redirect:/";
+		}
+		if(current_thread!=null) {
+			model.addAttribute("current_thread",current_thread);			
+		}
+		System.out.println(userid);
+		model.addAttribute("current_user", userService.findById(userid));		
 		return "show";	
 	}
 	
 	
 	
 //~~~~~~~~~~~	Operations ~~~~~~~~~~~~//
-// 	registration	
+// 	REGISTE/CREATE A USER	
 	
 	@RequestMapping(value="/register" , method = RequestMethod.POST)
-	public String register(@Valid @ModelAttribute("user") User user, BindingResult result,  HttpSession session ) {
+	public String register(
+					@Valid @ModelAttribute("user") User user
+					, BindingResult result
+					,  HttpSession session 
+	) {
 		userValidator.validate(user, result);
 		if(result.hasErrors()) {
 			return "index";
@@ -92,7 +117,12 @@ public class MainController {
 	
 //	login
 	@RequestMapping(value="login", method = RequestMethod.POST)
-	public String login(@RequestParam("username") String username,  @RequestParam("password") String password, HttpSession session, Model model) {
+	public String login(
+					@RequestParam("username") String username
+					,  @RequestParam("password") String password
+					, HttpSession session
+					, Model model
+	) {
 		if(userService.authenticateUser(username, password)) {
 			session.setAttribute("userid", userService.findByUsername(username).getId());
 			return "redirect:/"; 
@@ -111,16 +141,22 @@ public class MainController {
 	}
 
 // create thread
-//	@RequestMapping(value = "/newthread", method=RequestMapping.POST )
-//	public String createThread(
-//		@Valid@ModelAttribute("thread") Thread thread
-//		, BindingResult result
-//		, HttpSession session			
-//	) {
-//		User current_user = userService.findById((Long) session.getAttribute("userid"));
-//		Thread newthread = threadService.createThread(current_user, thread);
-//		return"index";
-//	}
+	@RequestMapping(value = "/createthread", method = RequestMethod.POST)
+	public String createThread(
+		@Valid@ModelAttribute("thread") Thread thread
+		, BindingResult result
+		, HttpSession session			
+	) {
+		if(result.hasErrors()) {
+			System.out.println("errors found this is not gonna work! ");
+			System.out.println(result.getAllErrors());
+			return "redirect:/";
+		}
+				System.out.println("hit create thread route, sending to threadservice...");
+		Thread newthread = threadService.createThread(thread);
+				System.out.println("created : " +  newthread + "  redirecting to index! ");
+		return"index";
+	}
 	
 
 	

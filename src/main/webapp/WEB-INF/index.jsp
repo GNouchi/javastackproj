@@ -48,22 +48,21 @@
 
 <c:if test="${userid!= null}">
 
-<form action="/createthread" method="post">
+<form:form action="/createthread" method="post" modelAttribute="thread">
 <h1>Create Thread</h1>
+	<form:hidden path="creator" value="${current_user}"></form:hidden>
 	<label >Categories</label><br> 
-	<select name ="categories">
+	<form:select path ="categories">
 		<c:forEach items="${categoryOptions}" var ="cat">
-			<option value="${cat}" label="${cat}"> 
+			<form:option value="${cat}" label="${cat.getCategory_name()}"/> 
 		</c:forEach>
-	</select><br>
+	</form:select><br>
 	
 	<label>Description</label><br>
-	<textarea cols="30" rows="10" name = "description"></textarea><br>
-
-	<label>Rating</label> <br>
-	<input type=number max=10, min=0 name="rating" /><br>
+	<form:textarea cols="30" rows="10" path = "description"></form:textarea><br>
+	
 	<button>Create</button>
-</form>
+</form:form>
 <br>
 
 
