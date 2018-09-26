@@ -13,6 +13,8 @@
 <a href="/dash">Dash</a>
 <a href="/create">Create</a>
 <a href="/logout">Logout</a>
+<a href="/show/1">Show</a>
+
 <h1>Index test</h1>
 
 <c:if test="${userid== null}">
@@ -41,6 +43,32 @@
 
 </form>
 </c:if>
+
+<!-- ----------------------------------------------------- -->
+
+<c:if test="${userid!= null}">
+
+<form action="/createthread" method="post">
+<h1>Create Thread</h1>
+	<label >Categories</label><br> 
+	<select name ="categories">
+		<c:forEach items="${categoryOptions}" var ="cat">
+			<option value="${cat}" label="${cat}"> 
+		</c:forEach>
+	</select><br>
+	
+	<label>Description</label><br>
+	<textarea cols="30" rows="10" name = "description"></textarea><br>
+
+	<label>Rating</label> <br>
+	<input type=number max=10, min=0 name="rating" /><br>
+	<button>Create</button>
+</form>
+<br>
+
+
+</c:if>
+
 
 
 </body>

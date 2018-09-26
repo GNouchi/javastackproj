@@ -35,7 +35,7 @@ public class User {
 		@Transient 
 		private String passwordConfirmation;
 		
-		@OneToMany(mappedBy="creator", fetch= FetchType.LAZY)
+		@OneToMany(mappedBy="creator", fetch = FetchType.LAZY)
 		private List<Thread> createdThreads = new ArrayList<Thread>();
 		
 		@ManyToMany(fetch=FetchType.LAZY)
@@ -46,10 +46,17 @@ public class User {
 		)
 		private List<Category> user_interests;	
 		
+		@OneToMany(mappedBy="post_owner", fetch = FetchType.LAZY)
+		private List<Post> created_posts;
+		
+		
+		
 		
 //	Constructor		
 		public User() {
 		}
+		
+		
 //	Getters and setters
 		public Long getId() {
 			return id;
@@ -103,6 +110,13 @@ public class User {
 		}
 		public void setUser_interests(List<Category> user_interests) {
 			this.user_interests = user_interests;
+		}
+
+		public List<Post> getCreated_posts() {
+			return created_posts;
+		}
+		public void setCreated_posts(List<Post> created_posts) {
+			this.created_posts = created_posts;
 		}
 		
 		

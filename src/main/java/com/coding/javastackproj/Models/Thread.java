@@ -3,6 +3,7 @@ package com.coding.javastackproj.Models;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -29,8 +32,8 @@ public class Thread {
 	@Max(10)
 	private Double rating = (double) 5;
 	
-	@Size(max=500)
-	private String content;
+	@Size(max=200)
+	private String description;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
@@ -44,11 +47,10 @@ public class Thread {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="creator_id")
-	private User creator;
+	private User creator;	
 	
-//	~~~~ Should have Origin Post ~~~
-//	@OneToOne
-//	private Video OriginPost;
+	@OneToMany(mappedBy="thread",fetch=FetchType.LAZY)
+	private List<Post> posts;
 	
 
     @Column(updatable=false)
@@ -62,13 +64,16 @@ public class Thread {
     protected void onUpdate(){
         this.updatedAt = new Date();
     }
+        
     
     
-// Contructor
+// 	Constructor
 	public Thread() {
 		super();
 	}
-//Getters and setters	
+
+	
+//	Getters and setters	
 	public Long getId() {
 		return id;
 	}
@@ -81,11 +86,11 @@ public class Thread {
 	public void setRating(Double rating) {
 		this.rating = rating;
 	}
-	public String getContent() {
-		return content;
+	public String getDescription() {
+		return description;
 	}
-	public void setContent(String content) {
-		this.content = content;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	public List<Category> getCategories() {
 		return categories;
@@ -99,6 +104,12 @@ public class Thread {
 	public void setCreator(User creator) {
 		this.creator = creator;
 	}
+	public List<Post> getPosts() {
+		return posts;
+	}
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
+	}
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -111,6 +122,6 @@ public class Thread {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
+
 	
 }
