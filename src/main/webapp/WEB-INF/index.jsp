@@ -15,7 +15,7 @@
 <a href="/logout">Logout</a>
 <a href="/show/1">Show</a>
 
-<h1>Index test</h1>
+<h1>Index test hello, ${current_user.getUsername()}</h1>
 
 <c:if test="${userid== null}">
 
@@ -43,27 +43,42 @@
 
 </form>
 </c:if>
-
 <!-- ----------------------------------------------------- -->
 
 <c:if test="${userid!= null}">
 
+	<p>${error}</p>
+
 <form:form action="/createthread" method="post" modelAttribute="thread">
 <h1>Create Thread</h1>
-	<form:hidden path="creator" value="${current_user}"></form:hidden>
+	<form:errors path="categories"></form:errors>
 	<label >Categories</label><br> 
-	<form:select path ="categories">
+	<form:select path="categories" >
 		<c:forEach items="${categoryOptions}" var ="cat">
-			<form:option value="${cat}" label="${cat.getCategory_name()}"/> 
+			<form:option value="${cat.getId()}" label="${cat.getCategory_name()}"/> 
 		</c:forEach>
 	</form:select><br>
 	
+	<form:errors path="description"></form:errors>
 	<label>Description</label><br>
-	<form:textarea cols="30" rows="10" path = "description"></form:textarea><br>
+	<form:textarea cols="30" rows="10" path="description"></form:textarea><br>
 	
-	<button>Create</button>
+	<button type ="submit">Create</button>
 </form:form>
 <br>
+
+<h1> Index </h1>
+<c:forEach items="${categoryOptions}" var="cat">
+	<p>${cat.getCategory_name()} ( ${cat.getThreads().size()} )</p>
+		<c:forEach items="${cat.getThreads()}" var ="thread">
+		 <a href="/show/${thread.getId()}"> ${thread.getDescription()}</a> [${thread.getPosts().size()}]
+		 <c:if test="${thread.getPosts().size()>0}">
+		<iframe width="426" height="240" src="https://www.youtube.com/embed/${thread.getPosts().get(0).getV_id()}" 
+		frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>		 
+		 </c:if>
+		</c:forEach>
+</c:forEach>
+
 
 
 </c:if>

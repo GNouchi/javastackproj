@@ -30,7 +30,7 @@ public class Thread {
 	private Long id;
 	
 	@Max(10)
-	private Double rating = (double) 5;
+	private Double rating ;
 	
 	@Size(max=200)
 	private String description;
@@ -44,7 +44,6 @@ public class Thread {
 	private List<Category> categories; 
 	
 //	could also have an admin list to make every thread a community
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="creator_id")
 	private User creator;	

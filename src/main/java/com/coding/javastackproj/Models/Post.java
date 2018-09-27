@@ -24,7 +24,7 @@ public class Post {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Size(min=1, max= 300)
+	@Size(max= 300)
 	private String comment;	
 	
 	@Size(max=15)
@@ -32,7 +32,7 @@ public class Post {
 	
 	@Max(10)
 	@Min(-10)
-	private Double personal_rating;
+	private Double personal_rating = (double) 7;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="post_owner_id")

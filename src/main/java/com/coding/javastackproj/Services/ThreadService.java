@@ -1,11 +1,11 @@
 package com.coding.javastackproj.Services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.coding.javastackproj.Models.Thread;
-import com.coding.javastackproj.Models.User;
 import com.coding.javastackproj.Repositories.ThreadRepo;
 
 @Service
@@ -23,7 +23,16 @@ public class ThreadService {
 			return result.get();			
 		}
 		else return null;
+	}	
+
+//	allThreads (temporary)
+	public List<Thread> findAllThreads(){
+		return threadRepo.findAll();
 	}
+
+//	first video by thread
+	
+	
 	
 	
 //	Create

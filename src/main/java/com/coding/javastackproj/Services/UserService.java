@@ -22,7 +22,7 @@ public class UserService {
 		return userRepo.findAll();
 	}
 // find user by id
-	public User findById(long id) {
+	public User findById(Long id) {
 		Optional<User> x = userRepo.findById(id);
 		if(x.isPresent()) {
 			return x.get();
