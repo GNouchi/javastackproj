@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.coding.javastackproj.Models.Category;
 import com.coding.javastackproj.Models.Post;
@@ -43,10 +44,10 @@ public class MainController {
 		this.threadService = threadService;
 		this.postService = postService;
 		this.categoryService = categoryService;
-		arr.add("delicious food");
-		arr.add("cooking");
-		arr.add("dumb stuff");
-		arr.add("!cats");
+			arr.add("delicious food");
+			arr.add("cooking");
+			arr.add("dumb stuff");
+			arr.add("!cats");
 		for( int i = 0; i< arr.size(); i++) {
 			Category baseCat = categoryService.createCategory(arr.get(i));
 			baseCategories.add(baseCat);
@@ -65,11 +66,19 @@ public class MainController {
 	) {
 		if(session.getAttribute("userid")!=null) {			
 			Long userid =  (Long) session.getAttribute("userid");
+			User current_user = userService.findById(userid);
 			List<Category> allCats = categoryService.findAllCategories();
-			model.addAttribute("current_user", userService.findById(userid));
-			model.addAttribute("categoryOptions" , allCats);
-//			List<Thread> allThreads = threadService.findAllThreads() ;
-//			model.addAttribute("allThreads", allThreads);
+			List<Category> user_interests = current_user.getUser_interests();
+				model.addAttribute("current_user", current_user);
+				model.addAttribute("categoryOptions" , allCats);
+				model.addAttribute("interests", current_user.getUser_interests());
+//				System.out.println("interests are : "+ user_interests);
+			List<String> arr = new ArrayList<String>();
+				for(Category category: user_interests) {					
+					System.out.println("cat : "+category.getId());
+					arr.add( postService.findLastVidByCategoryId(category.getId()) );
+				}
+				model.addAttribute("prize", arr);
 		}		
 		return "index";
 	}
@@ -96,6 +105,15 @@ public class MainController {
 		model.addAttribute("current_thread",current_thread);
 		return "show";	
 	}
+	
+//	SHOW ALL THREADS (no videos)
+	@RequestMapping("allthreads")
+	public String allthreads(HttpSession session, Model model) {
+		List<Thread> allthreads = threadService.findAllThreads();
+		model.addAttribute("allthreads", allthreads);
+		return "allthreads";
+	}
+	
 	
 	
 	
@@ -145,6 +163,23 @@ public class MainController {
 		System.out.println("bye felicia...");
 		return "redirect:/";		
 	}
+
+// add Interest(Category) to User
+	@RequestMapping(value="addcategorytouser", method =RequestMethod.POST)
+	public String addcategorytouser (
+			HttpSession session
+			, @RequestParam("categories") Long categoryId
+	) {
+		Long userid =  (Long) session.getAttribute("userid");
+		User user = userService.findById(userid);
+		Category newcat = categoryService.findCategoryById(categoryId) ;
+		userService.addCategory(user, newcat);
+		return "redirect:/";
+	}
+	
+	
+	
+	
 	
 // ~~~~~~~~~ Main Operations ~~~~~~~~~ //	
 	
@@ -188,18 +223,26 @@ public class MainController {
 					, @PathVariable("threadid") Long threadid
 					, @Valid @ModelAttribute("post") Post post
 					, BindingResult result
+					, RedirectAttributes ra
 	) {
 		System.out.println("hit post create!");
 		if(result.hasErrors()) {
 			List<ObjectError> x = result.getAllErrors();
-				System.out.println("errors found...");
-				System.out.println(result.getErrorCount());
+				System.out.println("errors found..."+result.getErrorCount());
 				System.out.println(x);
 		return "redirect:/show/"+ threadid;
 		}
-				System.out.println("sending to PostService...");
-		Post newpost= postService.createPost(post);
-				System.out.println("result : " + newpost);
+		System.out.println("checking if the video exists in thread...");
+		boolean canbeadded = postService.validateVid(threadid, post.getV_id());
+		if(canbeadded) {
+			System.out.println("sending to PostService...");
+			Post newpost= postService.createPost(post);		
+				threadService.calculateThreadRating(newpost.getThread());			
+				System.out.println("result : " + newpost + " Rating set to : " + newpost.getThread().getRating());
+		}
+		else {
+			ra.addFlashAttribute("existserror" , "video already exists in thread");
+		}
 		return"redirect:/show/"+ threadid;
 	}
 	

@@ -36,8 +36,7 @@ public class CategoryService {
 			}			
 		}
 		return false;		
-	}
-	
+	}	
 	
 //	Create (returns null or category)
 	public Category createCategory(String category_name) {		
@@ -48,7 +47,6 @@ public class CategoryService {
 		}
 		else return null;
 	}
-	
 //	Read
 //	Update
 //	Destroy

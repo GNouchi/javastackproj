@@ -10,7 +10,7 @@
 <body>
 <a href="/">Home</a>
 <a href="/login">Login</a>
-<a href="/dash">Dash</a>
+<a href="/allthreads">AllThreads</a>
 <a href="/create">Create</a>
 <a href="/logout">Logout</a>
 <a href="/show/1">Show</a>
@@ -38,7 +38,8 @@
 	frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 </c:forEach>
 
-
+<!-- form  -->
+<p>${existserror}</p>
 <form:form action="/show/${threadid}" method = "post" modelAttribute="post">
 	<form:hidden path= "post_owner" value="${current_user.getId()}" /><br>
 	<form:hidden path= "thread" value="${current_thread.getId()}" /><br>

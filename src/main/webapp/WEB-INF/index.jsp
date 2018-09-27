@@ -10,7 +10,7 @@
 <body>
 <a href="/">Home</a>
 <a href="/login">Login</a>
-<a href="/dash">Dash</a>
+<a href="/allthreads">AllThreads</a>
 <a href="/create">Create</a>
 <a href="/logout">Logout</a>
 <a href="/show/1">Show</a>
@@ -43,7 +43,7 @@
 
 </form>
 </c:if>
-<!-- ----------------------------------------------------- -->
+<!-- ---------------------  Create Thread form  -------------------------------- -->
 
 <c:if test="${userid!= null}">
 
@@ -66,10 +66,22 @@
 	<button type ="submit">Create</button>
 </form:form>
 <br>
+<p>***************************************************************************</p>
+<h1>User Interests</h1>
+<p>User has ${interests.size()} Interests</p>
+<p>Master Array: ${prize}</p>
+<c:forEach items="${prize}" var ="vid">
+<div>
+	<iframe width="426" height="240" src="https://www.youtube.com/embed/${vid}" 
+	frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div>
+
+</c:forEach>
+<p>***************************************************************************</p>
 
 <h1> Index </h1>
 <c:forEach items="${categoryOptions}" var="cat">
-	<p>${cat.getCategory_name()} ( ${cat.getThreads().size()} )</p>
+	<h3>Category name ${cat.getCategory_name()}  |Number of threads( ${cat.getThreads().size()} )</h3>
 		<c:forEach items="${cat.getThreads()}" var ="thread">
 		 <a href="/show/${thread.getId()}"> ${thread.getDescription()}</a> [${thread.getPosts().size()}]
 		 <c:if test="${thread.getPosts().size()>0}">
@@ -78,6 +90,22 @@
 		 </c:if>
 		</c:forEach>
 </c:forEach>
+<p>***************************************************************************</p>
+
+<h1>Temporary form to add Categories to current user</h1>
+
+<form action="/addcategorytouser" method ="post">
+	<select name= "categories">
+		<c:forEach items="${categoryOptions}" var="cat2">
+				<option value ="${cat2.getId()}" label= "${cat2.getCategory_name()}" ></option>
+		</c:forEach>
+	</select>
+	<button type ="submit">Add</button>
+
+</form>
+
+
+
 
 
 

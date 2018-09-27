@@ -31,6 +31,8 @@ public class Thread {
 	
 	@Max(10)
 	private Double rating ;
+
+	// probably want to add in a title!
 	
 	@Size(max=200)
 	private String description;

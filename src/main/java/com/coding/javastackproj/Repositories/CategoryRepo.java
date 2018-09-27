@@ -6,4 +6,5 @@ import com.coding.javastackproj.Models.Category;
 
 public interface CategoryRepo extends CrudRepository <Category, Long>{
 	List<Category> findAll();
+	
 }

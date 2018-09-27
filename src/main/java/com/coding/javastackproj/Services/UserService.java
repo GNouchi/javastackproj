@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import com.coding.javastackproj.Models.Category;
 import com.coding.javastackproj.Models.User;
 import com.coding.javastackproj.Repositories.UserRepo;
 
@@ -51,5 +52,25 @@ public class UserService {
 				}
 		return false;
 	}
+//	save user (for modification)
+	public void saveUser(User user) {
+		System.out.println("saving user!");
+		userRepo.save(user);
+	}
+// 	add category to user_interest
+	public void addCategory(User user, Category newcat) {
+		List<Category> user_interests = user.getUser_interests();
+			System.out.println("Am I adding? : " + !user_interests.contains(newcat) );
+		if(!user_interests.contains(newcat)) {
+			user_interests.add(newcat);			
+			userRepo.save(user);
+				System.out.println("adding");
+		}
+		else {
+				System.out.println("failed to add");
+		}
+		System.out.println("interests is now : "+ user.getUser_interests());
+	}
+	
 	
 }
