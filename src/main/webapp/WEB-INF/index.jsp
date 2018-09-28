@@ -24,32 +24,28 @@
 			<span class="navbar-toggler-icon"> </span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarmenu">
-			<ul class="navbar-nav">
-				<li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-				<li class="nav-item"><a href="/allthreads" class="nav-link">All
-						Threads</a></li>
-				<li class="nav-item"><a href="/create" class="nav-link">Create</a>
-				</li>
-				<li class="nav-item"><a href="/show/1" class="nav-link">Show</a>
-				</li>
-				<li class="nav-item"><a href="/login" class="nav-link">Log
-						In</a></li>
-				<li class="nav-item"><a href="/logout" class="nav-link">Log
-						Out</a></li>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item"><a href="/" class="nav-link">
+				<c:if test="${userid!=null}">
+					Welcome, ${current_user.getUsername()}
+				</c:if>
+				</a></li>
+				<li class="nav-item"><a href="/allthreads" class="nav-link">AllThreads</a></li>
+				<li class="nav-item"><a href="/create" class="nav-link">Create</a></li>
+				<li class="nav-item"><a href="/show/1" class="nav-link">Show</a></li>
+				<li class="nav-item"><a href="/login" class="nav-link">Log In</a></li>
+				<li class="nav-item"><a href="/logout" class="nav-link">Log	Out</a></li>
 			</ul>
 		</div>
 	</nav>
 	<!-- End of Nav -->
 
-
-	<c:if test="${userid!=null}">
-		<h1>Index test hello, ${current_user.getUsername()}</h1>
-	</c:if>
-
-
+	<div class="container">
 	<!-- Registration form -->
 
 	<c:if test="${userid== null}">
+		<br>
+		<div class="shadow p-3 mb-5 bg-white rounded">
 		<div class="row">
 			<div class="col">
 				<form:form action="/register" method="post" modelAttribute="user"
@@ -96,52 +92,55 @@
 				</form>
 			</div>
 		</div>
-
-
+	<br><br>
+	</div>
 	</c:if>
-	<!-- ---------------------  Create Thread form  -------------------------------- -->
-
-
-
+	
+	
+	
+	<!-----------------------  Create Thread form  -------------------------------- -->
 
 
 	<c:if test="${userid!= null}">
-
+		<h4 class="thread_topic">Create Thread</h4>
 		<p>${error}</p>
-
+		
+		<div class="shadow-sm p-3 mb-5 bg-white rounded">
 		<form:form action="/createthread" method="post"
 			modelAttribute="thread">
-			<h1>Create Thread</h1>
-			<form:errors path="title"></form:errors>
-			<label> Title</label>
-			<br>
-			<form:input path="title"></form:input>
-			<form:errors path="categories"></form:errors>
-			<label>Categories</label>
-			<br>
-			<form:select path="categories">
-				<c:forEach items="${categoryOptions}" var="cat">
-					<form:option value="${cat.getId()}"
+			
+			<div class="row">
+			<div class="col">			
+				<form:errors path="title"></form:errors>
+				<form:input path="title" placeholder="Title" class="form-control"></form:input><br>
+				<div class="form-group">
+				<button type="submit" class="btn btn-dark">Create</button>
+				</div>
+			</div>
+			<div class="col">
+				<form:errors path="description"></form:errors>
+				<form:textarea cols="30" rows="3" path="description" placeholder="Description" class="form-control"></form:textarea>
+			</div>
+			<div class="col">
+				<form:errors path="categories" ></form:errors>
+				<form:select path="categories" class="form-control">
+					<c:forEach items="${categoryOptions}" var="cat">
+						<form:option value="${cat.getId()}"
 						label="${cat.getCategory_name()}" />
-				</c:forEach>
-			</form:select>
-			<br>
-
-			<form:errors path="description"></form:errors>
-			<label>Description</label>
-			<br>
-			<form:textarea cols="30" rows="10" path="description"></form:textarea>
-			<br>
-
-			<button type="submit">Create</button>
+					</c:forEach>
+				</form:select>
+			</div>
+			</div>
 		</form:form>
-		<br>
-		<p>***************************************************************************</p>
-		<h1>User Interests</h1>
-		<p>User has ${interests.size()} Interests</p>
+		</div>
+	<!------------------------------------ User Interest --------------------------------->
+		<h4 class="thread_topic">User Interests</h4>
+		<div class="shadow p-3 mb-5 bg-white rounded">
+		<p>${current_user.getUsername()}, You have ${interests.size()} Interests</p>
 		<p>Master Array: ${interests}</p>
+		
+		
 		<c:if test="${Food.size() >0}">
-			<p>***************************************************************************</p>
 			<h2>Food</h2>
 			<c:forEach items="${Food}" var="vid">
 				<div>
@@ -193,7 +192,9 @@
 
 
 		<p>***************************************************************************</p>
-
+		
+		</div>
+		
 		<h1>Temporary form to add Categories to current user</h1>
 
 		<form action="/addcategorytouser" method="post">
@@ -212,7 +213,7 @@
 
 
 	</c:if>
-
+</div>
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
