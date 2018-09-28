@@ -44,10 +44,10 @@ public class MainController {
 		this.threadService = threadService;
 		this.postService = postService;
 		this.categoryService = categoryService;
-			arr.add("delicious food");
-			arr.add("cooking");
-			arr.add("dumb stuff");
-			arr.add("!cats");
+			arr.add("Food");
+			arr.add("Coding");
+			arr.add("Music");
+			arr.add("Gaming");
 		for( int i = 0; i< arr.size(); i++) {
 			Category baseCat = categoryService.createCategory(arr.get(i));
 			baseCategories.add(baseCat);
@@ -69,16 +69,15 @@ public class MainController {
 			User current_user = userService.findById(userid);
 			List<Category> allCats = categoryService.findAllCategories();
 			List<Category> user_interests = current_user.getUser_interests();
+			Integer resultstoreturn = 2;
 				model.addAttribute("current_user", current_user);
 				model.addAttribute("categoryOptions" , allCats);
-				model.addAttribute("interests", current_user.getUser_interests());
-//				System.out.println("interests are : "+ user_interests);
-			List<String> arr = new ArrayList<String>();
-				for(Category category: user_interests) {					
-					System.out.println("cat : "+category.getId());
-					arr.add( postService.findLastVidByCategoryId(category.getId()) );
+				model.addAttribute("interests", user_interests);
+				for(Category category: user_interests) {
+					System.out.println(category.getId() + " : " + category.getCategory_name());
+					List<Post> temp = postService.findxVidByCategoryId(category.getId(), resultstoreturn);					
+					model.addAttribute(category.getCategory_name(),temp);
 				}
-				model.addAttribute("prize", arr);
 		}		
 		return "index";
 	}
@@ -241,7 +240,7 @@ public class MainController {
 				System.out.println("result : " + newpost + " Rating set to : " + newpost.getThread().getRating());
 		}
 		else {
-			ra.addFlashAttribute("existserror" , "video already exists in thread");
+			ra.addFlashAttribute("existserror" , "video already exists in thread!");
 		}
 		return"redirect:/show/"+ threadid;
 	}

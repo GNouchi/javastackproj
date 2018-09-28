@@ -32,7 +32,8 @@ public class Thread {
 	@Max(10)
 	private Double rating ;
 
-	// probably want to add in a title!
+	@Size(min=1,max=50)
+	private String title;
 	
 	@Size(max=200)
 	private String description;
@@ -122,6 +123,12 @@ public class Thread {
 	}
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	

@@ -14,8 +14,8 @@ public interface PostRepo extends CrudRepository<Post,Long>{
 	List<BigInteger> findByThreadAndVId(Long threadid,String vid);
 
 	@Query(value="SELECT * FROM posts p join thread_categories tc on p.thread_id = tc.thread_id\r\n" + 
-			"where category_id = 1 order by created_at desc limit 1", nativeQuery= true)
-	Post findLastPostByCategoryId(Long categoryid);
+			"where category_id = ?1 order by created_at desc limit ?2", nativeQuery= true)
+	List<Post> findxPostByCategoryId(Long categoryid ,Integer numberofresults);
 	
 	
 }

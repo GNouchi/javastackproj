@@ -32,7 +32,7 @@
 
 <!-- POSTS -->
 <c:forEach items="${current_thread.getPosts()}" var ="post">
-	<p>Coments: ${post.getComment()} </p>
+	<p>Comments: ${post.getComment()} </p>
 	<p>User Rating : ${post.getPersonal_rating()}</p>	
 	<iframe width="854" height="480" src="https://www.youtube.com/embed/${post.getV_id()}" 
 	frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>

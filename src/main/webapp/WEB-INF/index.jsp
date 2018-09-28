@@ -51,6 +51,9 @@
 
 <form:form action="/createthread" method="post" modelAttribute="thread">
 <h1>Create Thread</h1>
+	<form:errors path="title"></form:errors>
+	<label> Title</label><br> 
+	<form:input path="title"></form:input>
 	<form:errors path="categories"></form:errors>
 	<label >Categories</label><br> 
 	<form:select path="categories" >
@@ -69,27 +72,55 @@
 <p>***************************************************************************</p>
 <h1>User Interests</h1>
 <p>User has ${interests.size()} Interests</p>
-<p>Master Array: ${prize}</p>
-<c:forEach items="${prize}" var ="vid">
-<div>
-	<iframe width="426" height="240" src="https://www.youtube.com/embed/${vid}" 
-	frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-</div>
-
-</c:forEach>
+<p>Master Array: ${interests}</p>
+<c:if test="${Food.size() >0}">
 <p>***************************************************************************</p>
+	<h2>Food</h2>
+	<c:forEach items="${Food}" var ="vid">
+		<div>
+			<iframe width="426" height="240" src="https://www.youtube.com/embed/${vid.getV_id()}" 
+			frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+		</div>
+	</c:forEach>
+</c:if>
 
-<h1> Index </h1>
-<c:forEach items="${categoryOptions}" var="cat">
-	<h3>Category name ${cat.getCategory_name()}  |Number of threads( ${cat.getThreads().size()} )</h3>
-		<c:forEach items="${cat.getThreads()}" var ="thread">
-		 <a href="/show/${thread.getId()}"> ${thread.getDescription()}</a> [${thread.getPosts().size()}]
-		 <c:if test="${thread.getPosts().size()>0}">
-		<iframe width="426" height="240" src="https://www.youtube.com/embed/${thread.getPosts().get(0).getV_id()}" 
-		frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>		 
-		 </c:if>
-		</c:forEach>
+<c:if test="${Coding.size() >0}">
+<p>***************************************************************************</p>
+	<h2>Coding</h2>
+	<c:forEach items="${Coding}" var ="vid">
+	<div>
+		<iframe width="426" height="240" src="https://www.youtube.com/embed/${vid.getV_id()}" 
+		frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+	</div>
 </c:forEach>
+</c:if>
+
+<c:if test="${Music.size() >0}">
+<p>***************************************************************************</p>
+	<h2>Music</h2>
+	<c:forEach items="${Music}" var ="vid">
+	<div>
+		<iframe width="426" height="240" src="https://www.youtube.com/embed/${vid.getV_id()}" 
+		frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+	</div>
+</c:forEach>
+</c:if>
+
+<c:if test="${Coding.size() >0}">
+<p>***************************************************************************</p>
+	<h2>Coding</h2>
+	<c:forEach items="${Coding}" var ="vid">
+	<div>
+		<iframe width="426" height="240" src="https://www.youtube.com/embed/${vid.getV_id()}" 
+		frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+	</div>
+</c:forEach>
+</c:if>
+
+
+
+
+
 <p>***************************************************************************</p>
 
 <h1>Temporary form to add Categories to current user</h1>

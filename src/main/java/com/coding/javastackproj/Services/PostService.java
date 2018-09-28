@@ -40,9 +40,11 @@ public class PostService {
 		return postRepo.save(post);
 	}
 //	Find last created post by Category
-	public String findLastVidByCategoryId(Long categoryid) {
-		System.out.println("found : "+ postRepo.findLastPostByCategoryId(categoryid).getV_id());
-			return postRepo.findLastPostByCategoryId(categoryid).getV_id();
+	public List<Post> findxVidByCategoryId(Long categoryid, Integer numberofresults) {
+				System.out.println("hit service");
+		List<Post> result = postRepo.findxPostByCategoryId(categoryid,numberofresults); 
+				System.out.println("sending back : " + result.size() + " result(s)"); 
+		return result;
 	}
 	
 	
