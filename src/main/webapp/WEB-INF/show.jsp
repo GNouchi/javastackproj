@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>    
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>    
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,13 +47,30 @@
 
 <div class="container">
 
-<div class="row">
-<div class="col">
-<h4>Show Thread ${current_thread.getCreator().getUsername() }</h4>
-</div>
-<div class="col">
 
-<!-- form  -->
+<div class="row">
+
+<!-- Left Column -->
+<div class="col">
+<div class="form-group"></div>
+<div class="form-group">
+	<h4>Topic ${current_thread.getTitle()}</h4>
+</div>
+<b>Created by:</b> ${current_thread.getCreator().getUsername()}<br>
+<b>Description:</b> ${current_thread.getDescription() }<br>
+<b>Published Date:</b> <fmt:formatDate value="${current_thread.getCreatedAt()}" pattern="MM-dd-yyyy," />
+<b>Time:</b> <fmt:formatDate value="${current_thread.getCreatedAt()}" pattern="HH:mm:ss a" /><br>
+<b>Average User Rating:</b> ${post.getPersonal_rating()}
+<p><b>Categories Tag#:</b> 
+	<c:forEach items="${current_thread.getCategories()}" var= "cat">
+		${cat.getCategory_name()} , 
+	</c:forEach>
+
+<p></p>
+</div>
+
+<div class="col">
+<!-- Form is on the Right Column -->
 
 <form:form action="/show/${threadid}" method = "post" modelAttribute="post">
 	<form:hidden path= "post_owner" value="${current_user.getId()}" /><br>
@@ -61,12 +79,35 @@
 	
 	<div class="row">
 	
-		<div class="col"><label for="basic-url">Insert your video</label></div>
-		<div class="form-group">
-		<div class="col">
-		<form:input path="personal_rating"  class="form-control" min="1" type="number" placeholder="What do you rate this 1-10?"/>
+		<%-- <div class="col">
+			<label for="basic-url">-- Add Your Video Here --</label>
 		</div>
-	</div>
+		<div class="form-group">
+			<div class="col">
+				<form:input path="personal_rating"  class="form-control" min="1" type="number" placeholder="What do you rate this 1-10?"/>
+			</div>
+		</div> --%>
+		<div class="col">
+		<div class="input-group mb-3">
+  			<div class="input-group-prepend">
+    			<label class="input-group-text" for="inputGroupSelect01">-- Add Your Favorite Video Here --</label>
+  			</div>
+  			<form:select class="custom-select" id="inputGroupSelect01" path="personal_rating">
+			    <form:option value="">Rating(1-10)</form:option>
+			    <form:option value="1">1</form:option>
+			    <form:option value="2">2</form:option>
+			    <form:option value="3">3</form:option>
+			    <form:option value="4">4</form:option>
+			    <form:option value="5">5</form:option>
+			    <form:option value="6">6</form:option>
+			    <form:option value="7">7</form:option>
+			    <form:option value="8">8</form:option>
+			    <form:option value="9">9</form:option>
+			    <form:option value="10">10</form:option>
+			</form:select>
+		</div>
+		</div>
+		
 	</div>
 	
 	<div class="input-group mb-3">
@@ -81,34 +122,12 @@
 </form:form>
 
 </div>
-
 </div>
 
-
-
-
-
-
-
-
-<p>Categories: 
-	<c:forEach items="${current_thread.getCategories()}" var= "cat">
-		${cat.getCategory_name()} , 
-	</c:forEach>
-</p>
-<p>OP: ${current_thread.getCreator().getUsername() } 
-	Description: ${current_thread.getDescription() }
-	Current Rating: ${current_thread.getRating() }
-	Created: ${current_thread.getCreatedAt()}
-</p>
-
-
-<c:if test="${current_thread.getUpdatedAt()!=null}">
+<%-- <c:if test="${current_thread.getUpdatedAt()!=null}">
 	<p>Last Updated: ${current_thread.getUpdatedAt()}</p>
-</c:if>
+</c:if> --%>
 
-<p>Comments: ${post.getComment()} </p>
-	<p>User Rating : ${post.getPersonal_rating()}</p>
 
 <!-- POSTS -->
 <c:forEach items="${current_thread.getPosts()}" var ="post">
@@ -116,9 +135,9 @@
 	
 		<iframe class="embed-responsive-item" width="300" height="250" src="https://www.youtube.com/embed/${post.getV_id()}" 
 		frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-	
+			
 </c:forEach>
-
+Comments: ${post.getComment()}
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

@@ -32,9 +32,6 @@
 				</a></li>
 				<li class="nav-item"><a href="/allthreads" class="nav-link">AllThreads</a></li>
 				<li class="nav-item"><a href="/show/1" class="nav-link">Show</a></li>
-		<c:if test="${userid== null}">
-				<li class="nav-item"><a href="/login" class="nav-link">Log In</a></li>
-		</c:if>
 				<li class="nav-item"><a href="/logout" class="nav-link">Log	Out</a></li>
 			</ul>
 		</div>
