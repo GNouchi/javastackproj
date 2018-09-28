@@ -31,9 +31,10 @@
 				</c:if>
 				</a></li>
 				<li class="nav-item"><a href="/allthreads" class="nav-link">AllThreads</a></li>
-				<li class="nav-item"><a href="/create" class="nav-link">Create</a></li>
 				<li class="nav-item"><a href="/show/1" class="nav-link">Show</a></li>
+		<c:if test="${userid== null}">
 				<li class="nav-item"><a href="/login" class="nav-link">Log In</a></li>
+		</c:if>
 				<li class="nav-item"><a href="/logout" class="nav-link">Log	Out</a></li>
 			</ul>
 		</div>
@@ -137,8 +138,7 @@
 		<h4 class="thread_topic">User Interests</h4>
 		<div class="shadow p-3 mb-5 bg-white rounded">
 		<p>${current_user.getUsername()}, You have ${interests.size()} Interests</p>
-		<p>Master Array: ${interests}</p>
-		
+	
 		
 		<c:if test="${Food.size() >0}">
 			<h2>Food</h2>
@@ -175,10 +175,10 @@
 			</c:forEach>
 		</c:if>
 
-		<c:if test="${Coding.size() >0}">
+		<c:if test="${Gaming.size() >0}">
 			<p>***************************************************************************</p>
-			<h2>Coding</h2>
-			<c:forEach items="${Coding}" var="vid">
+			<h2>Gaming</h2>
+			<c:forEach items="${Gaming}" var="vid">
 				<div>
 					<iframe width="426" height="240"
 						src="https://www.youtube.com/embed/${vid.getV_id()}"
@@ -195,7 +195,7 @@
 		
 		</div>
 		
-		<h1>Temporary form to add Categories to current user</h1>
+		<h1>Add Categories to current user</h1>
 
 		<form action="/addcategorytouser" method="post">
 			<select name="categories">

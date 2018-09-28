@@ -26,14 +26,12 @@
 		<div class="collapse navbar-collapse" id="navbarmenu">
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item"><a href="/" class="nav-link">
-				<c:if test="${userid!=null}">
-					Welcome, ${current_user.getUsername()}
-				</c:if>
 				</a></li>
 				<li class="nav-item"><a href="/allthreads" class="nav-link">AllThreads</a></li>
-				<li class="nav-item"><a href="/create" class="nav-link">Create</a></li>
 				<li class="nav-item"><a href="/show/1" class="nav-link">Show</a></li>
+		<c:if test="${userid== null}">				
 				<li class="nav-item"><a href="/login" class="nav-link">Log In</a></li>
+		</c:if>
 				<li class="nav-item"><a href="/logout" class="nav-link">Log	Out</a></li>
 			</ul>
 		</div>
@@ -44,10 +42,10 @@
 
 <h4> Thread index </h4>
 <c:forEach items = "${allthreads}" var = "thread">
-	<h4> Description : <a href="/show/${thread.getId()}">${thread.description}</a> - Videos: (${thread.getPosts().size()})</h4>
+	<h4><a href="/show/${thread.getId()}">ID: ${thread.getId()} Title: ${thread.title}</a> - Videos: (${thread.getPosts().size()})</h4>
 	<p>Categories: 
 	<c:forEach items="${thread.getCategories()}" var = "cat">
-		${cat.getCategory_name()} | 
+		${cat.getCategory_name()} | Description ${thread.title}
 	</c:forEach>
 	  </p>	
 </c:forEach>

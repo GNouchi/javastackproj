@@ -32,14 +32,12 @@
 		<div class="collapse navbar-collapse" id="navbarmenu">
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item"><a href="/" class="nav-link">
-				<c:if test="${userid!=null}">
-					Welcome, ${current_user.getUsername()}
-				</c:if>
 				</a></li>
 				<li class="nav-item"><a href="/allthreads" class="nav-link">AllThreads</a></li>
-				<li class="nav-item"><a href="/create" class="nav-link">Create</a></li>
 				<li class="nav-item"><a href="/show/1" class="nav-link">Show</a></li>
+		<c:if test="${userid== null}">
 				<li class="nav-item"><a href="/login" class="nav-link">Log In</a></li>
+		</c:if>
 				<li class="nav-item"><a href="/logout" class="nav-link">Log	Out</a></li>
 			</ul>
 		</div>
@@ -120,13 +118,6 @@
 		frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 	
 </c:forEach>
-
-
-<p> *** this should be hideable ****
-		If your link is : https://www.youtube.com/watch?v=0jHOCc5VWE8&list=PLATy4A7kRga0DXH9bXIFqZHLN8fq40ZvS&index=37
-		<br>The videoID is the gibberish between "watch?v=" and "&"
-		<br>VideoID: 0jHOCc5VWE8
-	</p>
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
